@@ -12,6 +12,8 @@ kaplay({ background: [0, 0, 0] });
 loadSprite("bean", "sprites/bean.png");
 loadSprite("floor", "sprites/floor.png");
 loadSprite("background", "sprites/background.png");
+loadSprite("sky", "sprites/sky.jpeg");
+loadSprite("cloud", "sprites/cloud1.png");
 
 scene("game", () => {
     // define gravity
@@ -24,14 +26,30 @@ scene("game", () => {
 
     // Speeds
     const backgroundSpeed = 50;
+    const cloudSpeed = 40;
     const platformSpeed = 100;
+
+    // Sky
+    add([sprite("sky"), pos(0, -550), opacity(0.5), scale(1.6)]);
 
     // Background
     const bgPieceWidth = 765;
     const yPositionBackground = -18;
     const bgPieces = [
-        add([sprite("background"), pos(0, yPositionBackground), opacity(0.8), scale(2.5)]),
+        add([sprite("background"), pos(0, yPositionBackground), opacity(1), scale(2.5)]),
         add([sprite("background"), pos(bgPieceWidth, yPositionBackground), opacity(0.8), scale(2.5)])
+    ];
+
+    // clouds
+    const cloudWidth = 500;
+    const yPositionCloud = 150;
+    const yPositionCloud2 = 100;
+    const clouds = [
+        add([sprite("cloud"), pos(40, yPositionCloud), scale(2)]),
+        add([sprite("cloud"), pos(1000, yPositionCloud2), scale(2)]),
+        add([sprite("cloud"), pos(1800, yPositionCloud2), scale(2)]),
+        add([sprite("cloud"), pos(1500, yPositionCloud2 + 100), scale(1.5)]),
+        add([sprite("cloud"), pos(cloudWidth, yPositionCloud2), scale(0.6)])
     ];
 
     // Platform
@@ -54,6 +72,23 @@ scene("game", () => {
 
         bgPieces[0].move(-backgroundSpeed, 0);
         bgPieces[1].moveTo(bgPieces[0].pos.x + bgPieceWidth * 2, yPositionBackground);
+
+        // Clouds - move all clouds
+        for (const cloud of clouds) {
+            cloud.move(-cloudSpeed, 0);
+        }
+
+        // Wrap around when the first cloud goes off screen
+        if (clouds[0].pos.x < -cloudWidth) {
+            const frontCloud = clouds.shift();
+            if (frontCloud) {
+                // Position at the end with random Y and scale
+                const lastCloud = clouds[clouds.length - 1];
+                frontCloud.moveTo(lastCloud.pos.x + rand(400, 600), rand(-100, 250));
+                frontCloud.scaleTo(rand(0.5, 2));
+                clouds.push(frontCloud);
+            }
+        }
 
         // Platform
         if (platforms[1].pos.x < 0) {
