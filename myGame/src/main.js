@@ -2,14 +2,15 @@ import kaplay from "kaplay";
 import "kaplay/global";
 
 const FLOOR_HEIGHT = 600;
-const JUMP_FORCE = 800;
+const JUMP_FORCE = 1000;
 const SPEED = 480;
-const GRAVITY = 2000;
-const LENGTH = 10000;
+const GRAVITY = 1500;
+const LENGTH = 4500;
+const MIN_DIST_OBSTACLE = 400;
 // Speeds
 const backgroundSpeed = 50;
 const cloudSpeed = 40;
-const platformSpeed = 100;
+const platformSpeed = 320;
 // Assets positioning
 // Background
 const bgPieceWidth = 765;
@@ -27,12 +28,15 @@ const colliderH = 30;
 const yPositionCollider = 810;
 // Stitch
 const stitchStartX = 200;
-const stitchStartY = 600;
+const stitchStartY = 300;
 
 const Obstacles = ["alien", "box", "fire", "mine", "tree", "warning"];
 
 // initialize context
-kaplay({ background: [0, 0, 0] });
+kaplay({ 
+    background: [0, 0, 0],
+    debug: true  // Enable debug mode to see collision boxes
+});
 
 // load assets
 loadSprite("bean", "sprites/bean.png");
@@ -61,6 +65,7 @@ loadSprite("stitch", "sprites/stitch.png", {
 });
 
 scene("game", () => {
+
     // define gravity
     setGravity(GRAVITY);
 
@@ -72,7 +77,8 @@ scene("game", () => {
 
     // Track distance traveled
     let distanceTraveled = 0;
-    let nextObstacleDistance = 0; // First obstacle spawn distance
+    let nextObstacleDistance = 0; 
+    let gameComplete = false; 
 
     // Sky
     add([sprite("sky"), pos(0, -550), opacity(0.5), scale(1.6)]);
@@ -107,7 +113,9 @@ scene("game", () => {
         sprite("stitch"), 
         pos(stitchStartX, stitchStartY), 
         anchor("bot"), // Anchor at bottom so feet touch the ground
-        area(), 
+        area({
+        shape: new Rect(vec2(10, 0), 60, 200)
+        }),
         body(), 
         scale(1), 
         z(5)
@@ -117,15 +125,16 @@ scene("game", () => {
     // Spawn obstacles based on distance
     function spawnObstacle() {
         // win condition
-        if (distanceTraveled >= LENGTH) {
+        if (distanceTraveled >= LENGTH && !gameComplete) {
+            gameComplete = true;
             stitch.play("happy");
-            wait(2, () => go("lose", Math.floor(distanceTraveled)));
+            wait(2, () => go("win", Math.floor(distanceTraveled)));
             return;
         }
 
         const obstacle = add([
             sprite(choose(Obstacles)),
-            pos(width(), 430),
+            pos(width(), 790),
             anchor("bot"),
             area(),
             body({ isStatic: true }),
@@ -146,6 +155,7 @@ scene("game", () => {
     stitch.onCollide("obstacle", () => {
         go("lose", 0);
     });
+    
 
     // Jump function
     function jump() {
@@ -161,14 +171,27 @@ scene("game", () => {
 
     // UI logic
     onUpdate(() => {
+        // Stop everything if game is complete
+        if (gameComplete) {
+            return;
+        }
+
         // Track distance traveled
         distanceTraveled += platformSpeed * dt();
 
+        // Check if LENGTH completed
+        if (distanceTraveled >= LENGTH && !gameComplete) {
+            gameComplete = true;
+            stitch.play("happy");
+            wait(2, () => go("win", Math.floor(distanceTraveled)));
+            return;
+        }
+
         // Spawn obstacle when reaching next spawn distance
-        if (distanceTraveled >= nextObstacleDistance && distanceTraveled < LENGTH) {
+        if (distanceTraveled >= nextObstacleDistance && distanceTraveled < LENGTH - 800) {
             spawnObstacle();
-            // Set next obstacle distance with minimum 150px gap + random extra
-            nextObstacleDistance = distanceTraveled + 250 + rand(100, 300);
+            // Set next obstacle distance with minimum 300px gap + random extra
+            nextObstacleDistance = distanceTraveled + MIN_DIST_OBSTACLE + rand(100, 300);
         }
 
         // Stitch at fixed x
@@ -297,6 +320,22 @@ scene("game", () => {
     //     score++;
     //     scoreLabel.text = score;
     // });
+});
+
+scene("win", (distance) => {
+    add([text("You Win!"), pos(center()), anchor("center"), color(0, 255, 0)]);
+
+    // display distance
+    add([
+        text(`Distance: ${distance}px`),
+        pos(width() / 2, height() / 2 + 80),
+        scale(2),
+        anchor("center"),
+    ]);
+
+    // go back to game when space is pressed
+    onKeyPress("space", () => go("game"));
+    onMousePress(() => go("game"));
 });
 
 scene("lose", (score) => {
