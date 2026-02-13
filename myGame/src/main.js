@@ -21,9 +21,12 @@ const yPositionCloud2 = 100;
 const platformWidth = 1172;
 const yPositionPlatform = 435;
 const platformScale = 1.2;
+// Collider - platform
+const colliderH = 30;
+const yPositionCollider = 810;
 // Stitch
-const stitchStartX = 50;
-const stitchStartY = 400;
+const stitchStartX = 200;
+const stitchStartY = 600;
 
 
 // initialize context
@@ -78,8 +81,12 @@ scene("game", () => {
 
     // Platforms
     const platforms = [
-        add([sprite("floor"), pos(0, yPositionPlatform), scale(platformScale), area(), body({ isStatic: true })]),
-        add([sprite("floor"), pos(2560, yPositionPlatform), scale(platformScale), area(), body({ isStatic: true })]),
+        add([sprite("floor"), pos(0, yPositionPlatform), scale(platformScale)]),
+        add([sprite("floor"), pos(2560, yPositionPlatform), scale(platformScale)]),
+    ];
+    const platformColliders = [
+        add([rect(platformWidth, colliderH), pos(0, yPositionCollider), area(), body({ isStatic: true }), opacity(0)]),
+        add([rect(platformWidth, colliderH), pos(platformWidth, yPositionCollider), area(), body({ isStatic: true }), opacity(0)])
     ];
 
     // Stitch
@@ -90,7 +97,7 @@ scene("game", () => {
         area(), 
         body(), 
         scale(1), 
-        z(100)
+        z(5)
     ]);
     stitch.play("run");
 
@@ -98,6 +105,7 @@ scene("game", () => {
     function jump() {
         if (stitch.isGrounded()) {
             stitch.jump(JUMP_FORCE);
+            stitch.play("jump");
         }
     }
 
@@ -109,6 +117,18 @@ scene("game", () => {
     onUpdate(() => {
         // Stitch at fixed x
         stitch.pos.x = stitchStartX;
+
+        // Change animation based on state
+        if (stitch.isGrounded()) {
+            if (stitch.curAnim() !== "run") {
+                stitch.play("run");
+            }
+        } else if (stitch.vel.y > 0) {
+            // Falling
+            if (stitch.curAnim() !== "fall") {
+                stitch.play("fall");
+            }
+        }
 
         // Background
         if (bgPieces[1].pos.x < 0) {
