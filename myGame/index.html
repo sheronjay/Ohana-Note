@@ -25,26 +25,96 @@
     </script>
     
     <script src="/env.js?v=1"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: "IBM Plex Mono", system-ui, -apple-system, sans-serif;
+        }
+
+        #orientation-warning {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            box-sizing: border-box;
+            background: radial-gradient(circle at top, rgba(47, 65, 122, 0.9), rgba(8, 10, 25, 0.96));
+            color: #f4f6ff;
+        }
+
+        .warning-card {
+            width: min(560px, 100%);
+            border-radius: 18px;
+            padding: 28px;
+            background: rgba(11, 17, 42, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 14px 60px rgba(5, 7, 22, 0.4);
+        }
+
+        .warning-title {
+            margin: 0 0 14px;
+            font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+        }
+
+        .warning-text {
+            margin: 0 0 14px;
+            line-height: 1.55;
+            color: #d8dcf5;
+        }
+
+        .warning-list {
+            margin: 0;
+            padding-left: 20px;
+            line-height: 1.65;
+            color: #eef1ff;
+        }
+
+        .warning-note {
+            margin-top: 14px;
+            color: #aeb6e8;
+            font-size: 0.9rem;
+        }
+
+        #skip-warning {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            background: linear-gradient(135deg, #ff69b4, #fa4f7a);
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 8px 24px rgba(250, 79, 122, 0.35);
+        }
+
+        #skip-warning:hover {
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
 
-<body style="overflow:hidden">
-    <div id="orientation-warning"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; justify-content:center; align-items:center; flex-direction:column; padding:20px; box-sizing:border-box;">
-        <div style="text-align:center; color:white; max-width:500px;">
-            <h1 style="font-size:24px; margin-bottom:20px; font-family: Arial, sans-serif;">⚠️ Screen Size Notice</h1>
-            <p style="font-size:18px; line-height:1.6; margin-bottom:20px; font-family: Arial, sans-serif;">
-                For the best gaming experience, please:
+<body>
+    <div id="orientation-warning">
+        <div class="warning-card">
+            <h1 class="warning-title">✨ Better in Landscape</h1>
+            <p class="warning-text">
+                This game is built for wider screens so controls and obstacles are easier to follow.
             </p>
-            <ul
-                style="text-align:left; font-size:16px; line-height:1.8; margin-bottom:20px; font-family: Arial, sans-serif;">
-                <li>Use a tablet or laptop/desktop computer, OR</li>
-                <li>Rotate your mobile device to landscape mode (horizontal)</li>
+            <ul class="warning-list">
+                <li>On phones/tablets, rotate to landscape (horizontal).</li>
+                <li>On laptops/desktops, expand the browser window if it looks cramped.</li>
             </ul>
-            <p style="font-size:14px; color:#aaa; font-family: Arial, sans-serif;">
-                This game is optimized for wider screens.
+            <p class="warning-note">
+                You can still continue in the current view.
             </p>
-            <button id="skip-warning"
-                style="margin-top:20px; padding:12px 30px; font-size:16px; background:#ff69b4; color:white; border:none; border-radius:8px; cursor:pointer; font-family: Arial, sans-serif; font-weight:bold;">
+            <button id="skip-warning">
                 Play Anyway
             </button>
         </div>
@@ -56,7 +126,7 @@
         function checkOrientation() {
             const warning = document.getElementById('orientation-warning');
             const isPortrait = window.innerHeight > window.innerWidth;
-            const isSmallScreen = window.innerWidth < 768;
+            const isSmallScreen = window.innerWidth < 900;
 
             if ((isPortrait || isSmallScreen) && !userSkippedWarning) {
                 warning.style.display = 'flex';

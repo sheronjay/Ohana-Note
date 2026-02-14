@@ -11,6 +11,8 @@ const JUMP_FORCE = 930;
 const SPEED = 480;
 const GRAVITY = 1500;
 const LENGTH = 5500;
+const GAME_WIDTH = 1536;
+const GAME_HEIGHT = 900;
 const MIN_DIST_OBSTACLE = 400;
 let STITCH_AT_CENTER = 0;
 let LENGTH_COMPLETED = false;
@@ -44,6 +46,10 @@ const Obstacles = ["alien", "box", "fire", "mine", "tree", "warning"];
 // initialize context
 kaplay({
     background: [0, 0, 0],
+    width: GAME_WIDTH,
+    height: GAME_HEIGHT,
+    letterbox: true,
+    stretch: false,
     debug: true  // Enable debug mode to see collision boxes
 });
 
