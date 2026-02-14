@@ -4,10 +4,10 @@ import { message, sender } from "./message.js";
 import { createMessageOverlay, removeMessageOverlay } from "./messageOverlay.js";
 
 const FLOOR_HEIGHT = 600;
-const JUMP_FORCE = 1000;
+const JUMP_FORCE = 820;
 const SPEED = 480;
 const GRAVITY = 1500;
-const LENGTH = 2000;
+const LENGTH = 10000;
 const MIN_DIST_OBSTACLE = 400;
 let STITCH_AT_CENTER = 0;
 let LENGTH_COMPLETED = false;
@@ -24,7 +24,7 @@ const cloudWidth = 500;
 const yPositionCloud = 150;
 const yPositionCloud2 = 100;
 // Platform
-const platformWidth = 1172;
+const platformWidth = 2000;
 const yPositionPlatform = 435;
 const platformScale = 1.2;
 // Collider - platform
@@ -69,7 +69,8 @@ loadSprite("stitch", "sprites/stitch.png", {
         jump: { from: 12, to: 14, speed: 6, loop: true },
         happy: { from: 18, to: 20, speed: 6, loop: true },
         fall: { from: 24, to: 25, speed: 6, loop: true },
-        still: { from: 0, to: 0, speed: 6, loop: true }
+        still: { from: 0, to: 0, speed: 6, loop: true },
+        lose: { from: 24, to: 24, speed: 6, loop: true },
     }
 });
 // Lilo
@@ -194,10 +195,22 @@ scene("game", () => {
     onKeyPress("space", jump);
     onMousePress(jump);
 
+    // Score label
+    const scoreLabel = add([
+        text("Score: 0m"),
+        pos(width() - 20, 20),
+        anchor("topright"),
+        scale(1),
+        z(100)
+    ]);
+
     // UI logic
     onUpdate(() => {
         // Track distance traveled
         distanceTraveled += platformSpeed * dt();
+
+        // Update score label
+        scoreLabel.text = `Score: ${Math.floor(distanceTraveled)}m`;
 
         // Check if LENGTH completed
         if (distanceTraveled >= LENGTH) {
@@ -391,6 +404,19 @@ scene("game", () => {
 });
 
 scene("win", (distance) => {
+    // Sky
+    add([sprite("sky"), pos(0, -550), opacity(0.5), scale(1.6)]);
+
+    // Background
+    add([sprite("background"), pos(0, yPositionBackground), opacity(1), scale(2.5)]);
+
+    // Clouds
+    add([sprite("cloud"), pos(40, yPositionCloud), scale(2)]);
+    add([sprite("cloud"), pos(1000, yPositionCloud2), scale(2)]);
+
+    // Platform
+    add([sprite("floor"), pos(0, yPositionPlatform), scale(platformScale)]);
+
     add([text("You Win!"), pos(center()), anchor("center"), color(0, 255, 0)]);
 
     // display distance
@@ -407,6 +433,19 @@ scene("win", (distance) => {
 });
 
 scene("lose", (score) => {
+    // Sky
+    add([sprite("sky"), pos(0, -550), opacity(0.5), scale(1.6)]);
+
+    // Background
+    add([sprite("background"), pos(0, yPositionBackground), opacity(1), scale(2.5)]);
+
+    // Clouds
+    add([sprite("cloud"), pos(40, yPositionCloud), scale(2)]);
+    add([sprite("cloud"), pos(1000, yPositionCloud2), scale(2)]);
+
+    // Platform
+    add([sprite("floor"), pos(0, yPositionPlatform), scale(platformScale)]);
+
     add([text("Game Over"), pos(center()), anchor("center")]);
 
     // display score
