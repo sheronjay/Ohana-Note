@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: lilo-stitch-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./message-app/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3306"
+    networks:
+      app-network:
+        aliases:
+          - mysql
+          - db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      timeout: 20s
+      retries: 10
+      interval: 5s
+      start_period: 30s
+
+  # Backend API
+  backend:
+    build:
+      context: ./message-app/backend
+      dockerfile: Dockerfile
+    container_name: lilo-stitch-backend
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: 3002
+      GAME_URL: ${GAME_URL}
+    ports:
+      - "3002:3002"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Landing Page
+  landing:
+    build:
+      context: ./message-app/landing
+      dockerfile: Dockerfile
+    container_name: lilo-stitch-landing
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Game
+  game:
+    build:
+      context: ./myGame
+      dockerfile: Dockerfile
+    container_name: lilo-stitch-game
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
