@@ -7,7 +7,7 @@ import { createMessageOverlay, removeMessageOverlay } from "./messageOverlay.js"
 let message = "Loading message...";
 
 const FLOOR_HEIGHT = 600;
-const JUMP_FORCE = 880;
+const JUMP_FORCE = 900;
 const SPEED = 480;
 const GRAVITY = 1500;
 const LENGTH = 5500;
@@ -80,7 +80,7 @@ loadSprite("stitch", "sprites/stitch.png", {
     sliceX: 6,
     sliceY: 5,
     anims: {
-        idle: { from: 0, to: 3, speed: 6, loop: true },
+        idle: { from: 0, to: 3, speed: 3, loop: true },
         run: { from: 6, to: 11, speed: 8, loop: true },
         jump: { from: 12, to: 14, speed: 6, loop: true },
         happy: { from: 18, to: 20, speed: 6, loop: true },
@@ -349,7 +349,10 @@ scene("game", () => {
             wait(3, () => {
                 stitch.play("happy");
                 lilo.play("happy");
-                // wait(2, () => go("win", Math.floor(distanceTraveled)));
+                wait(3, () => {
+                    stitch.play("idle");
+                    lilo.play("idle");
+                });
             });
         }
 
