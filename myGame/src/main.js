@@ -502,15 +502,29 @@ scene("lose", (score) => {
     // Platform
     add([sprite("floor"), pos(0, yPositionPlatform), scale(platformScale)]);
 
-    add([text("Game Over"), pos(center()), anchor("center")]);
+    add([text("Game Over"), pos(center()), anchor("center"), scale(2)]);
 
     // display score
     add([
-        text(score),
+        text(`Score: ${score}m`),
         pos(width() / 2, height() / 2 + 80),
-        scale(2),
+        scale(1.5),
         anchor("center"),
     ]);
+
+    // Retry instruction
+    const retryText = add([
+        text("Press SPACE or Click to Retry"),
+        pos(width() / 2, height() / 2 + 150),
+        scale(0.8),
+        anchor("center"),
+        opacity(1),
+    ]);
+
+    // Blinking effect for retry text
+    retryText.onUpdate(() => {
+        retryText.opacity = Math.abs(Math.sin(time() * 2));
+    });
 
     // go back to game when space is pressed
     onKeyPress("space", () => go("game"));
