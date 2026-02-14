@@ -53,6 +53,9 @@ services:
       context: ./message-app/landing
       dockerfile: Dockerfile
     container_name: lilo-stitch-landing
+    environment:
+      BACKEND_URL: ${BACKEND_URL}
+      GAME_URL: ${GAME_URL}
     ports:
       - "3000:80"
     networks:
