@@ -31,8 +31,8 @@ createBtn.addEventListener('click', async () => {
         return;
     }
 
-    if (message.length < 10) {
-        showError('Your message should be at least 10 characters long!');
+    if (message.length < 5) {
+        showError('Your message should be at least 5 characters long!');
         return;
     }
 
