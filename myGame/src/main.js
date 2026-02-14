@@ -4,10 +4,10 @@ import { message } from "./message.js";
 import { createMessageOverlay, removeMessageOverlay } from "./messageOverlay.js";
 
 const FLOOR_HEIGHT = 600;
-const JUMP_FORCE = 860;
+const JUMP_FORCE = 880;
 const SPEED = 480;
 const GRAVITY = 1500;
-const LENGTH = 5000;
+const LENGTH = 5500;
 const MIN_DIST_OBSTACLE = 400;
 let STITCH_AT_CENTER = 0;
 let LENGTH_COMPLETED = false;
