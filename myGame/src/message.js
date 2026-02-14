@@ -84,5 +84,5 @@ Happy Valentine’s Day, my love.
 Come closer.
 Always.
 Chethan`;
-export const sender = "Chethan";
+
     

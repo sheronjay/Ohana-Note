@@ -1,6 +1,6 @@
 import kaplay from "kaplay";
 import "kaplay/global";
-import { message, sender } from "./message.js";
+import { message } from "./message.js";
 import { createMessageOverlay, removeMessageOverlay } from "./messageOverlay.js";
 
 const FLOOR_HEIGHT = 600;
@@ -321,7 +321,7 @@ scene("game", () => {
                 };
 
                 // Create and display message overlay with close handler
-                const messageOverlay = createMessageOverlay(message, sender, closeHandler);
+                const messageOverlay = createMessageOverlay(message, closeHandler);
                 document.body.appendChild(messageOverlay);
 
                 // Clean up overlay when letter is destroyed

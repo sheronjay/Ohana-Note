@@ -1,11 +1,11 @@
 /**
  * Creates a scrollable message overlay on top of the letter sprite
  * @param {string} message - The message text to display
- * @param {string} sender - The sender's name
+
  * @param {Function} onClose - Optional callback function to call when close button is clicked
  * @returns {HTMLElement} The overlay element
  */
-export function createMessageOverlay(message, sender, onClose) {
+export function createMessageOverlay(message, onClose) {
     // Create scrollable message overlay
     const messageOverlay = document.createElement("div");
     messageOverlay.style.position = "absolute";
@@ -44,15 +44,8 @@ export function createMessageOverlay(message, sender, onClose) {
     // Add signature
     const signature = document.createElement("div");
     signature.style.marginTop = "30px";
-    signature.style.textAlign = "right";
-    signature.style.fontStyle = "italic";
-    signature.style.fontSize = "16px";
-    signature.style.fontWeight = "bold";
-    signature.style.color = "#90255bff";
-    signature.innerText = `- ${sender}`;
 
     textContainer.appendChild(content);
-    textContainer.appendChild(signature);
 
     // Create close button
     const closeButton = document.createElement("button");
