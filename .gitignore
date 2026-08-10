@@ -1,1 +1,21 @@
 .env
+
+# Spring Boot Backend
+message-app/backend-spring/target/
+message-app/backend-spring/.mvn/wrapper/maven-wrapper.jar
+!message-app/backend-spring/src/main/**/target/
+!message-app/backend-spring/src/test/**/target/
+
+# IDEs and Editors
+message-app/backend-spring/.apt_generated
+message-app/backend-spring/.classpath
+message-app/backend-spring/.factorypath
+message-app/backend-spring/.project
+message-app/backend-spring/.settings
+message-app/backend-spring/.springBeans
+message-app/backend-spring/.sts4-cache
+message-app/backend-spring/.idea
+message-app/backend-spring/*.iws
+message-app/backend-spring/*.iml
+message-app/backend-spring/*.ipr
+message-app/backend-spring/.vscode/
