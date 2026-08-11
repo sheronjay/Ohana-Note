@@ -6,7 +6,7 @@ USE messages_db;
 
 -- Create messages table
 CREATE TABLE IF NOT EXISTS messages (
-    uuid VARCHAR(36) PRIMARY KEY,
+    uuid VARCHAR(255) PRIMARY KEY,
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_created_at (created_at)
