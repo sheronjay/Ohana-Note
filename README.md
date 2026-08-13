@@ -7,7 +7,7 @@ A web app where you can write a private message, generate a unique link, and sha
 [![Watch the demo](https://img.youtube.com/vi/4WQL9CAbyR4/maxresdefault.jpg)](https://www.youtube.com/watch?v=4WQL9CAbyR4)
 ## Live App
 
-👉 https://justforus.qzz.io
+~~https://justforus.qzz.io~~ (deployment no longer active)
 
 ## Project Overview
 
