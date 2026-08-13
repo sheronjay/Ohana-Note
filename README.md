@@ -2,6 +2,9 @@
 
 A web app where you can write a private message, generate a unique link, and share it so the recipient can discover the message in the game experience.
 
+## 🎥 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/4WQL9CAbyR4/maxresdefault.jpg)](https://www.youtube.com/watch?v=4WQL9CAbyR4)
 ## Live App
 
 👉 https://justforus.qzz.io
@@ -30,11 +33,6 @@ This project is split into three parts:
 - **Backend API**: Node.js with Express for handling message creation and retrieval
 - **Database**: MySQL for persistent message storage
 - **Containerization**: Docker Compose orchestrating all services (MySQL, backend, landing page, game client)
-
-## 🎥 Demo Video
-
-[![Watch the demo](https://img.youtube.com/vi/4WQL9CAbyR4/maxresdefault.jpg)](https://www.youtube.com/watch?v=4WQL9CAbyR4)
-
 
 ## Issues, Feature Requests, and Improvements
 
